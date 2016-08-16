@@ -1,9 +1,9 @@
 doctype html
-html
+html(ng-app='app')
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
+  body(ng-controller='main')
     block content
 
     script(src='/jquery/dist/jquery.min.js')

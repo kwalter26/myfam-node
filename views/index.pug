@@ -3,4 +3,8 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  textarea.chatroom
+  form
+    textarea(ng-model='messages' cols='50' rows='10')
+    br
+    input(type='text' width='300px' ng-model='message')
+    input(type='button' value='Send' ng-click='addMessage()')
