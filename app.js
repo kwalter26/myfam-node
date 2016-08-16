@@ -16,13 +16,13 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
 mongoose.connect(dbconfig.uri,function(err){
-  if(err) console.log('Mongoose:   Error occured!');
+  if(err) console.log('Mongoose:   Error occured!',err);
   else console.log('Mongoose:   Connected to ' + dbconfig.uri);
 });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
