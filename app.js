@@ -15,6 +15,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+
 mongoose.connect(dbconfig.uri,function(err){
   if(err) console.log('Mongoose:   Error occured!',err);
   else console.log('Mongoose:   Connected to ' + dbconfig.uri);
@@ -35,6 +36,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/angular',express.static(path.join(__dirname, 'node_modules/angular')));
+app.use('/jquery',express.static(path.join(__dirname, 'node_modules/jquery')));
 
 app.use('/', routes);
 app.use('/users', users);
