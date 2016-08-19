@@ -4,7 +4,8 @@ block content
   h1= title
   p Welcome to #{title}
   form
-    textarea(ng-model='messages' cols='50' rows='10')
+    ul
+      li(ng-repeat='message in messages') {{message}}
     br
     input(type='text' width='300px' ng-model='message')
-    input(type='button' value='Send' ng-click='addMessage()')
+    input(type='button' value='Send' ng-click='sendMessage()')

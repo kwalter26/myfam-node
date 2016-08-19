@@ -5,21 +5,44 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var passport = require('passport');
+var flash = require('connect-flash');
+var session = require('express-session');
+var passportSocketIo = require("passport.socketio");
+
 var dbconfig = require('./db/config.js');
 var mongoose = require('mongoose');
-
-var routes = require('./routes/index');
-var users = require('./routes/users');
+mongoose.connect(dbconfig.uri,function(err){
+  if(err) console.log('Mongoose:   Error occured!',err);
+  else console.log('Mongoose:   Connected to ' + dbconfig.uri);
+});
+var MongoStore = require('connect-mongo')(session);
+var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
 
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+app.use(session({
+  secret: 'kalikat',
+  store: sessionStore
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
-mongoose.connect(dbconfig.uri,function(err){
-  if(err) console.log('Mongoose:   Error occured!',err);
-  else console.log('Mongoose:   Connected to ' + dbconfig.uri);
+io.use(passportSocketIo.authorize({
+  // cookieParser: cookieParser,
+  secret:      'kalikat',    // make sure it's the same than the one you gave to express
+  store:       sessionStore,
+  success:     onAuthorizeSuccess,  // *optional* callback on success
+  fail:        onAuthorizeFail,
+}));
+
+io.sockets.on('connection', function(socket) {
+  console.log(socket.request.user);
 });
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,8 +63,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/angular',express.static(path.join(__dirname, 'node_modules/angular')));
 app.use('/jquery',express.static(path.join(__dirname, 'node_modules/jquery')));
 
-app.use('/', routes);
-app.use('/users', users);
+require('./config/passport')(passport); // pass passport for configuration
+
+///////////////////////////////////////////////////////////////////
+//  Add Routes                                                   //
+///////////////////////////////////////////////////////////////////
+require('./routes/index')(app,passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -73,6 +100,17 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+function onAuthorizeSuccess(data, accept){
+  console.log('successful connection to socket.io');
+  accept(); //Let the user through
+}
+
+function onAuthorizeFail(data, message, error, accept){
+  if(error) accept(new Error(message));
+  console.log('failed connection to socket.io:', message);
+  accept(null, false);
+}
 
 
 module.exports = {app: app, server: server};
