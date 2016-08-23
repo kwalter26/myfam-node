@@ -17,7 +17,7 @@ mongoose.connect(dbconfig.uri,function(err){
   else console.log('Mongoose:   Connected to ' + dbconfig.uri);
 });
 var MongoStore = require('connect-mongo')(session);
-var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection });
+var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection,clear_interval:10000 });
 
 var app = express();
 var server = require('http').Server(app);
@@ -25,7 +25,8 @@ var io = require('socket.io')(server);
 
 app.use(session({
   secret: 'kalikat',
-  store: sessionStore
+  store: sessionStore,
+  cookie: {maxAge:600000}
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -33,10 +34,10 @@ app.use(flash());
 
 io.use(passportSocketIo.authorize({
   // cookieParser: cookieParser,
-  secret:      'kalikat',    // make sure it's the same than the one you gave to express
-  store:       sessionStore,
-  success:     onAuthorizeSuccess,  // *optional* callback on success
-  fail:        onAuthorizeFail,
+  secret:       'kalikat',    // make sure it's the same than the one you gave to express
+  store:        sessionStore,
+  success:      onAuthorizeSuccess,  // *optional* callback on success
+  fail:         onAuthorizeFail,
 }));
 
 io.sockets.on('connection', function(socket) {
@@ -53,7 +54,7 @@ app.set('view engine', 'pug');
 app.use(function(req,res,next){
   res.io = io;
   next();
-})
+});
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -62,6 +63,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/angular',express.static(path.join(__dirname, 'node_modules/angular')));
 app.use('/jquery',express.static(path.join(__dirname, 'node_modules/jquery')));
+app.use('/bootstrap',express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
+app.use('/angular-route',express.static(path.join(__dirname, 'node_modules/angular-route')));
+
 
 require('./config/passport')(passport); // pass passport for configuration
 

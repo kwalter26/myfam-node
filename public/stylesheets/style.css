@@ -1,8 +1,19 @@
+@import url('./login.css');
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #5b5b5b;
 }
 
-a {
-  color: #00B7FF;
+.navbar {
+  margin-bottom: 0px;
+}
+
+.dashboard-jumbo {
+  background-image: url('/pictures/baseball-in-glove.jpg');
+  background-position:center;
+  background-size: 100%;
+  height:200px;
+  padding: 30px;
+  color:#ffffff;
+  font-weight: bolder;
 }

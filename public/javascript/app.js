@@ -1,22 +1,17 @@
 
-angular.module('app', [])
-  .controller('main',function($scope,$http){
-    $scope.messages = ['hello'];
-    $scope.message = 'uh oh';
-    $scope.sendMessage = function(){
-      $http.post('/api/article',{message: $scope.message})
-        .success(function(){
-          $scope.message = '';
+angular.module('app',['ngRoute'])
+  .config(function($routeProvider,$locationProvider){
+    $routeProvider
+        .when('/',{
+           redirectTo : '/dashboard'
         })
-        .error(function(err){
-          console.log(err);
+        .when('/dashboard',{
+            templateUrl : 'partial/dashboard.pug',
+            controller : 'dashboardController'
+        })
+        .when('/leagues',{
+            templateUrl : 'partial/leagues.pug',
+            controller : 'leaguesController'
         });
-    }
-
-  var socket = io('/');
-  socket.on('postArticle', function (data) {
-    console.log('here');
-    $scope.messages.push(data);
-    $scope.$apply();
+      $locationProvider.html5Mode(true);
   });
-})

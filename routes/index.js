@@ -1,7 +1,3 @@
-
-
-
-
 module.exports = function(app,passport) {
 
 
@@ -16,19 +12,14 @@ module.exports = function(app,passport) {
   // app.use('/api/contact',contact);
   // app.use('/api/data',data);
 
-  // app.get('/partial/:name', function (req, res){
-  //   var name = req.params.name;
-  //   var admin = false;
-  //   if(req.user != undefined){
-  //     admin = req.user.local.admin;
-  //   }
-  //   console.log('Partial attempted');
-  //   res.render('partials/' + name,{admin: admin});
-  // });
+  app.get('/partial/:name', function (req, res){
+    var name = req.params.name;
+    res.render('partials/' + name);
+  });
 
 
   app.get('/*', isLoggedIn, function(req,res,next){
-    res.render('index',{title:'Score-It'});
+    res.render('index',{title:'Score-It',user:{email:req.user.local.email}});
   });
 
   // route middleware to make sure a user is logged in
@@ -38,6 +29,6 @@ module.exports = function(app,passport) {
       return next();
     // if they aren't redirect them to the home page
     res.redirect('/auth/login');
-  };
+  }
 
-}
+};

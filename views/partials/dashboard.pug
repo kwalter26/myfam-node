@@ -1,0 +1,22 @@
+.jumbotron.dashboard-jumbo
+  h1 Dashboard
+.container-fluid
+  .row
+    .col-md-8
+      .row
+        .col-md-12
+          nav.navbar.navbar-inverse
+            .container-fluid
+              form.navbar-form.navbar-left
+                button.btn.btn-success New
+          .article(ng-repeat='article in articles')
+            .panel.panel-default
+              .panel-heading
+                h2 {{article.title}}
+              .panel-body
+                p {{article.body}}
+              .panel-footer
+                p.text-right {{article.createdBy}}
+    .col-md-4
+      .row
+        .col-md-12
