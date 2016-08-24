@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var lessMiddleware = require('less-middleware');
 
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -48,6 +49,7 @@ io.sockets.on('connection', function(socket) {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+app.use(lessMiddleware(__dirname + '/public'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -65,7 +67,7 @@ app.use('/angular',express.static(path.join(__dirname, 'node_modules/angular')))
 app.use('/jquery',express.static(path.join(__dirname, 'node_modules/jquery')));
 app.use('/bootstrap',express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/angular-route',express.static(path.join(__dirname, 'node_modules/angular-route')));
-
+app.use('/fonts',express.static(path.join(__dirname,'node_modules/bootstrap/fonts')));
 
 require('./config/passport')(passport); // pass passport for configuration
 

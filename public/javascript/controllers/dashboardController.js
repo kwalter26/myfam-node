@@ -1,18 +1,35 @@
 angular.module('app')
 .controller('dashboardController',function($scope,$http){
+  $scope.editIndex = -1;
+
   $scope.articles = [
-    {
-      title:'New League',
-      body:'There is a new league',
-      createdBy:'Kyle Walter',
-      dateCreated:''
-    },
-    {
-      title:'Cards win!',
-      body:'Cardinals Beat the Cubs',
-      createdBy:'Kyle Walter'
-    }
+
   ];
+  $scope.edit = function(index){
+    if(index == -1){
+      $scope.articles.unshift({
+        title:'',
+        body:''
+      });
+      $scope.editIndex = 0;
+    }else{
+      $scope.editIndex = index;
+    }
+  };
+  $scope.save = function(index){
+    $http.post('/api/article',$scope.articles[index])
+      .success(function(data){
+        $scope.articles = data.articles;
+      })
+      .error(function(err){
+        console.log(err);
+      });
+
+    $scope.editIndex = -1;
+  };
+  $scope.isEditing = function(index){
+    return index == $scope.editIndex;
+  };
   $scope.newArticle = function(){
     $http.post('/api/article',{})
       .success(function(){
