@@ -17,9 +17,11 @@ angular.module('app')
     }
   };
   $scope.save = function(index){
-    $http.post('/api/article',$scope.articles[index])
+    console.log();
+    $http.post('/api/article/' + $scope.articles[index]._id,$scope.articles[index])
       .success(function(data){
-        $scope.articles = data.articles;
+        console.log(data);
+        $scope.articles = data;
       })
       .error(function(err){
         console.log(err);
@@ -29,15 +31,6 @@ angular.module('app')
   };
   $scope.isEditing = function(index){
     return index == $scope.editIndex;
-  };
-  $scope.newArticle = function(){
-    $http.post('/api/article',{})
-      .success(function(){
-        $scope.message = '';
-      })
-      .error(function(err){
-        console.log(err);
-      });
   };
   $scope.init = function(){
     $http.get('/api/article')

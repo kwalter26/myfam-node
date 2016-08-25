@@ -1,13 +1,17 @@
-.jumbotron.dashboard-jumbo
+.jumbotron.dashboard-jumbo(ng-init='init()')
   h1 Dashboard
 .container-fluid
   .row
     .col-md-8
       .row
         .col-md-12
+
+    .col-md-4
+      .row
+        .col-md-12
           button.btn.btn-success.newArticleButton(ng-click='edit(-1)') New
           .article(ng-repeat='article in articles')
-            .panel.panel-primary
+            .panel.panel-danger
               .panel-heading.clearfix
                 h4.pull-left(ng-hide='isEditing($index)') {{article.title}}
                 .form-group
@@ -18,7 +22,4 @@
               .panel-body
                 p(ng-hide='isEditing($index)') {{article.body}}
                 textarea.form-control(ng-show='isEditing($index)' placeholder='Enter Text' ng-model='article.body')
-                p.text-right {{article.createdBy}}
-    .col-md-4
-      .row
-        .col-md-12
+                p.text-right {{article.createdBy.username}}
