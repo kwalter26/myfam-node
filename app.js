@@ -69,7 +69,7 @@ app.use('/bootstrap',express.static(path.join(__dirname, 'node_modules/bootstrap
 app.use('/angular-route',express.static(path.join(__dirname, 'node_modules/angular-route')));
 app.use('/fonts',express.static(path.join(__dirname,'node_modules/bootstrap/fonts')));
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./controllers/passport')(passport); // pass passport for configuration
 
 ///////////////////////////////////////////////////////////////////
 //  Add Routes                                                   //

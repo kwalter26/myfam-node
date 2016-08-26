@@ -1,0 +1,20 @@
+br
+.container-fluid
+  .row
+    .col-md-10.col-md-offset-1
+      .panel.panel-primary
+        .panel-heading
+        .panel-body
+          table.table.table-striped.table-hover
+            tr
+              th Name
+              th Manager
+              th Location
+              th Status
+            tr(ng-repeat='league in leagues')
+              td {{league.name}}
+              td {{league.manager}}
+              td {{league.location}}
+              td {{league.status}}
+
+        .panel-footer
