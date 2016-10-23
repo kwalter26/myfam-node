@@ -1,9 +1,10 @@
 {
-  "name": "express-socketio",
-  "version": "0.0.0",
+  "name": "myfam",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www"
   },
   "dependencies": {
     "angular": "^1.5.8",
