@@ -7,22 +7,19 @@ var userSchema = mongoose.Schema({
   lastName:String,
   token:String,
   tokenExpire:Date,
-  local:{
-    email:String,
-    password:String
-  }
+  role: String,
+  email:String,
+  password:String,
+  imgUrl:String,
+  
 });
 
-userSchema.pre('save',function(next){
-  var user = this;
-  var SALT_FACTOR = 8;
-
-  if(!user.isModified('password')) return next();
-  user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
-});
+userSchema.methods.updatePassword = function(password){
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
 
 userSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);

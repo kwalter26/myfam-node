@@ -1,25 +1,16 @@
 module.exports = function(app,passport) {
 
+  app.use('/auth',require('./auth')(passport));
+  app.use('/api/user',isLoggedIn,require('./api/user'));
 
-
-  var auth = require('./auth.js')(passport);
-  var article = require('./api/article');
-  // var contact = require('./api/contact');
-  // var data = require('./api/data');
-
-  app.use('/auth',auth);
-  app.use('/api/article',article);
-  // app.use('/api/contact',contact);
-  // app.use('/api/data',data);
-
-  app.get('/partial/:name', function (req, res){
+  app.get('/partial/:name',isLoggedIn, function (req, res){
     var name = req.params.name;
-    res.render('partials/' + name);
+    res.render('partials/' + name,{id:req.user.id});
   });
 
 
   app.get('/*', isLoggedIn, function(req,res,next){
-    res.render('index',{title:'Score-It',user:{email:req.user.local.email}});
+    res.render('index',{title:'Score-It',user:{email:req.user.email,id:req.user.id}});
   });
 
   // route middleware to make sure a user is logged in

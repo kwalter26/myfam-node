@@ -1,30 +1,5 @@
 extends layout
 
 block content
-  nav.navbar.navbar-inverse
-    .container-fluid
-      .navbar-header
-      .collapse.navbar-collapse(id='scit-nav-main')
-        ul.nav.navbar-nav
-          li
-            a(href='/dashboard') Dashboard
-          li
-            a(href='/leagues') Leagues
-          li
-            a(href='/teams') Teams
-          li
-            a(href='/users') Users
-        ul.nav.navbar-nav.navbar-right
-          li
-            a(href='#')= user.email
-          li
-            a(href='/auth/logout' target='_self') Logout
-        form.navbar-form.navbar-right
-          .form-group
-            input.form-control(type='text' placeholder='Search')
-            select.form-control(name='searchType')
-              option(value='League') League
-              option(value='Team') Team
-              option(value='Player') Player
-            button.btn.btn-success Search
+  
   .main-container(ng-view)

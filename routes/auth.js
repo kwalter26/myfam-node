@@ -20,14 +20,14 @@ module.exports = function(passport) {
         failureFlash: true // allow flash messages
     }));
 
-    router.get('/signup', function(req, res, next) {
-        res.render('signup', {
-            title: 'Signup',
+    router.get('/register', function(req, res, next) {
+        res.render('register', {
+            title: 'Register',
             message: req.flash('loginMessage')
         });
     });
 
-    router.post('/signup', passport.authenticate('local-signup', {
+    router.post('/register', passport.authenticate('local-signup', {
         successRedirect: '/', // redirect to the secure profile section
         failureRedirect: '/signup', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
@@ -61,14 +61,17 @@ module.exports = function(passport) {
                             return res.redirect('/auth/forgot');
                         }
                         user.token = token;
-                        user.tokenExpire = Date.now() + 20000; // 20 seconds
+                        user.tokenExpire = Date.now() + 60000; // 20 seconds
                         user.save(function(err) {
                             done(err, token, user);
                         });
                     });
             },
             function(token, user, done) {
-                var smtpTransport = nodemailer.createTransport('smtps://' + process.env.GOEMAIL + ':' + process.env.GOPASS + '@smtp.gmail.com');
+                var goEmail = 'walter.kl26@gmail.com';
+                var goPass = 'gjbgqalwkymovnsd';
+                
+                var smtpTransport = nodemailer.createTransport('smtps://' +goEmail + ':' + goPass + '@smtp.gmail.com');
                 console.log(user);
                 var mailOptions = {
                     to: user.local.email,
@@ -76,13 +79,13 @@ module.exports = function(passport) {
                     subject: 'ScoreIt Password Reset',
                     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                        'http://' + req.headers.host + '/auth/reset/' + token + '\n\n' +
                         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
                 };
                 smtpTransport.sendMail(mailOptions, function(err) {
-                    if (!err) console.log(err);
+                    if (err) console.log(err);
                     req.flash('info', 'An e-mail has been sent to ' + user.local.email + ' with further instructions.');
-                    done(err, 'done');
+                    //done(err, 'done');
                 });
             },
             function(err) {
@@ -97,7 +100,7 @@ module.exports = function(passport) {
     router.get('/reset/:token', function(req, res) {
         User.findOne({
             token: req.params.token,
-            resetPasswordExpires: {
+            tokenExpire: {
                 $gt: Date.now()
             }
         }, function(err, user) {
@@ -106,7 +109,29 @@ module.exports = function(passport) {
                 return res.redirect('/auth/forgot');
             }
             res.render('reset', {
-                user: req.user
+                email: user.local.email,
+                token: user.token,
+                title: 'Reset Password'
+            });
+        });
+    });
+
+    router.post('/reset/:token', function(req,res){
+        User.findOne({
+            token: req.params.token,
+            tokenExpire: {
+                $gt: Date.now()
+            }
+        }, function(err, user) {
+            if (!user) {
+                req.flash('error', 'Password reset token is invalid or has expired.');
+                return res.redirect('/auth/forgot');
+            }
+            user.updatePassword(req.body.password);
+            user.save(function(err) {
+                if (err)
+                    throw err;
+                res.redirect('/auth/login');
             });
         });
     });

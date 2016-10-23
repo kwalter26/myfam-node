@@ -1,0 +1,17 @@
+.container-fluid(ng-init='getUser(\'' + id + '\')')
+    .row
+        .col-md-4.col-md-offset-2
+            img.img-thumbnail(ng-src='{{user.imgUrl}}' height='100%' width='100%')
+        .col-md-4
+            form
+                .form-group
+                    label First Name
+                    input.form-control(type='text' name='firstname' ng-model='user.firstname')
+                .form-group
+                    label Last Name
+                    input.form-control(type='text' name='lastname' ng-model='user.lastname')
+                .form-group
+                    label Email
+                    input.form-control(type='email' name='email' ng-model='user.email')
+                .form-group
+                    button.btn.btn-info Change Password

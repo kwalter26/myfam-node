@@ -5,6 +5,33 @@ html(ng-app='app')
     link(rel='stylesheet', href='/stylesheets/style.css')
     base(href='/')
   body
+    nav.navbar.navbar-inverse
+      .container-fluid
+        .navbar-header
+          a.navbar-brand(href='/dashboard') MyFam
+        - if(user)
+          .collapse.navbar-collapse(id='scit-nav-main')
+            ul.nav.navbar-nav
+              li
+                a(href='/dashboard') Dashboard
+              li
+                a(href='/events') Events
+              li
+                a(href='/members') Members
+            ul.nav.navbar-nav.navbar-right
+              li
+                a(href='/mypage')= user.email
+              li
+                a(href='/auth/logout' target='_self') Logout
+            form.navbar-form.navbar-right
+              .form-group
+                input.form-control(type='text' placeholder='Search the Fam')
+                select.form-control(name='searchType')
+                  option(value='First Name') First
+                  option(value='Last Name') Last
+                  option(value='Age') Age
+                button.btn.btn-success Search
+    
     block content
 
     script(src='/jquery/dist/jquery.min.js')
@@ -15,4 +42,6 @@ html(ng-app='app')
 
     script(src='/javascript/app.js')
     script(src='/javascript/controllers/dashboardController.js')
-    script(src='/javascript/controllers/leaguesController.js')
+    script(src='/javascript/controllers/eventsController.js')
+    script(src='/javascript/controllers/membersController.js')
+    script(src='/javascript/controllers/mypageController.js')
