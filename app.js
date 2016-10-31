@@ -68,6 +68,7 @@ app.use('/jquery',express.static(path.join(__dirname, 'node_modules/jquery')));
 app.use('/bootstrap',express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/angular-route',express.static(path.join(__dirname, 'node_modules/angular-route')));
 app.use('/fonts',express.static(path.join(__dirname,'node_modules/bootstrap/fonts')));
+app.use('/angular-file',express.static(path.join(__dirname,'node_modules/angular-file-upload/dist')));
 
 require('./controllers/passport')(passport); // pass passport for configuration
 

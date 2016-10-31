@@ -11,6 +11,15 @@ var userSchema = mongoose.Schema({
   email:String,
   password:String,
   imgUrl:String,
+  active:Boolean,
+  primaryPhone:String,
+  secondaryPhone:String,
+  family:[
+    {
+      id:String,
+      relationship:String
+    }
+  ]
   
 });
 

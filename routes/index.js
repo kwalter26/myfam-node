@@ -8,7 +8,6 @@ module.exports = function(app,passport) {
     res.render('partials/' + name,{id:req.user.id});
   });
 
-
   app.get('/*', isLoggedIn, function(req,res,next){
     res.render('index',{title:'Score-It',user:{email:req.user.email,id:req.user.id}});
   });

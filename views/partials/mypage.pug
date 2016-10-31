@@ -1,17 +1,56 @@
 .container-fluid(ng-init='getUser(\'' + id + '\')')
-    .row
-        .col-md-4.col-md-offset-2
-            img.img-thumbnail(ng-src='{{user.imgUrl}}' height='100%' width='100%')
-        .col-md-4
+    form
+        .row
+            .col-md-4.col-md-offset-2
+                img.img-thumbnail(ng-src='{{user.imgUrl}}' height='100%' width='100%')
+            .col-md-4
+                .row
+                    .col-md-6
+                        .form-group
+                            label First Name
+                            input.form-control(type='text' ng-readonly='readOnly' name='firstname' ng-model='user.firstName') 
+                    .col-md-6
+                        .form-group
+                            label Last Name
+                            input.form-control(type='text' ng-readonly='readOnly' name='lastname' ng-model='user.lastName')
+                .row 
+                    .col-md-12
+                        .form-group
+                            label Email
+                            input.form-control(type='email' ng-readonly='readOnly' name='email' ng-model='user.email')
+                        .form-group(ng-hide='readOnly')
+                            label Change Password
+                            input.form-control(type='password' name='password' ng-model='user.password')
+                        .form-group(ng-hide='readOnly')
+                            label Confirm Password
+                            input.form-control(type='password' name='confirmpassword' ng-model='user.confirmPassword')
+        .row
+            .col-md-8.col-md-offset-2
+                hr
+                h3 Fam
+                .row
+                    .col-md-4
+        .row
+            .col-md-8.col-md-offset-2
+                hr
+                h3 Contact
+                .row
+                    .col-md-4
+                        .form-group
+                            label Primary Phone
+                            input.form-control(type='text'  ng-readonly='readOnly' name='father' ng-model='user.primaryPhone')
+                        .form-group
+                            label Secondary Phone
+                            input.form-control(type='text' ng-readonly='readOnly' name='mother' ng-model='user.secondaryPhone')
+        .row
+            .col-md-8.col-md-offset-2
+                button.btn.btn-info(type='button' ng-show='readOnly' ng-click='toggleReadOnly()') Edit
+                button.btn.btn-danger(type='button' ng-hide='readOnly' ng-click='saveUser(\''+id+'\')') Save
+
+
+        .row
+            .col-md-8.col-md-offset-2
             form
-                .form-group
-                    label First Name
-                    input.form-control(type='text' name='firstname' ng-model='user.firstname')
-                .form-group
-                    label Last Name
-                    input.form-control(type='text' name='lastname' ng-model='user.lastname')
-                .form-group
-                    label Email
-                    input.form-control(type='email' name='email' ng-model='user.email')
-                .form-group
-                    button.btn.btn-info Change Password
+                input(type="file" ng-file-select="fileSelected($files)" accept="'image/*'")
+                button(type='button' ng-click='upload()') Upload
+    

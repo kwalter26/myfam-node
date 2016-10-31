@@ -53,7 +53,7 @@ module.exports = function(passport) {
             },
             function(token, done) {
                 User.findOne({
-                        'local.email': req.body.email
+                        'email': req.body.email
                     })
                     .exec(function(err, user) {
                         if (!user) {
@@ -74,7 +74,7 @@ module.exports = function(passport) {
                 var smtpTransport = nodemailer.createTransport('smtps://' +goEmail + ':' + goPass + '@smtp.gmail.com');
                 console.log(user);
                 var mailOptions = {
-                    to: user.local.email,
+                    to: user.email,
                     from: 'passwordreset@scoreit.com',
                     subject: 'ScoreIt Password Reset',
                     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -84,7 +84,7 @@ module.exports = function(passport) {
                 };
                 smtpTransport.sendMail(mailOptions, function(err) {
                     if (err) console.log(err);
-                    req.flash('info', 'An e-mail has been sent to ' + user.local.email + ' with further instructions.');
+                    req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
                     //done(err, 'done');
                 });
             },
@@ -109,7 +109,7 @@ module.exports = function(passport) {
                 return res.redirect('/auth/forgot');
             }
             res.render('reset', {
-                email: user.local.email,
+                email: user.email,
                 token: user.token,
                 title: 'Reset Password'
             });
