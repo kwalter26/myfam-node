@@ -2,35 +2,22 @@ var express = require('express');
 var router  = express.Router();
 var fs = require('fs');
 var User = require('../../models/user');
+var userC = require('../../controllers/user.js');
 
 var multiparty = require('connect-multiparty');
 var multipartyMiddleware = multiparty({ uploadDir: './tmp/uploads' });
 
 
 router.get('/',function(req,res){
-    User.find({},{
-        __v:false,
-        password:false,
-        token:false,
-        tokenExpire:false,
-    },function(err,users){
-        if(err){
-            throw err;
-        }
-        if(!users){
-
-        }
+    userC.getUsers(function(err,users){
+        if(err) throw err;
         res.json(users);
-    })
+    });
 });
 
 router.post('/',function(req,res){
-    
-});
-
-router.get('/:key/:value',function(req,res){
-    User.findOne({[req.params.key]:req.params.value},{
-         __v:false,
+    User.findOne({email:req.body.email},{
+        __v:false,
         password:false,
         token:false,
         tokenExpire:false,
@@ -38,9 +25,28 @@ router.get('/:key/:value',function(req,res){
         if(err){
             throw err;
         }
-        if(!user){
+        if(!users && (req.user.role == 'admin')){
 
+            user = new User();
+
+            if(req.body.firstName) user.firstName = req.body.firstName;
+            if(req.body.lastName) user.lastName = req.body.lastName;
+            if(req.body.email) user.email = req.body.email;
+            if(req.body.primaryPhone) user.primaryPhone = req.body.primaryPhone;
+            if(req.body.secondaryPhone) user.secondaryPhone = req.body.secondaryPhone;
+            if(req.body.imgUrl) user.imgUrl = req.body.imgUrl;
+            if(req.body.password && req.body.confirmPassword && (req.body.password == req.body.confirmPassword)) user.updatePassword(password);
+            user.save(function(err) {
+            if (err)
+                throw err;
+                res.json(user);
+        });
         }
+    });
+});
+
+router.get('/:key/:value',function(req,res){
+    userC.getUser(req.params.key,req.params.value,function(err,user){
         res.json(user);
     });
 });

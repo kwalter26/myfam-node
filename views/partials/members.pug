@@ -1,1 +1,10 @@
-h1 Members
+.container-fluid(ng-init='getUsers()')
+    .row
+        .col-md-8.col-md-offset-2
+            .row
+                .col-md-4(ng-repeat='user in users')
+                    .row
+                        .col-md-4
+                            img(width='100%' src='{{user.imgUrl}}')
+                        .col-md-4
+                            h3 {{user.firstName}} {{user.lastName}}
