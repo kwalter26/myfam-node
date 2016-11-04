@@ -1,8 +1,14 @@
 .container-fluid(ng-init='getUser(\'' + id + '\')')
-    form
+    form(name="form")
         .row
             .col-md-4.col-md-offset-2
-                img.img-thumbnail(ng-src='{{user.imgUrl}}' height='100%' width='100%')
+                img.img-thumbnail(ngf-thumbnail='file' ng-show='file' width='100%')
+                img.img-thumbnail(ngf-src='user.imgUrl' ng-hide='file' width='100%')
+                .form-group(ng-hide='readOnly')
+                    span
+                        input.form-control(type='text' name='file' ng-show='file' ng-model='file.name') 
+                        input.form-control(type='text' name='imgUrl' ng-hide='file' ng-model='user.imgUrl') 
+                        .btn.btn-info(ngf-select ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ) Browse
             .col-md-4
                 .row
                     .col-md-6
@@ -46,15 +52,5 @@
             .col-md-8.col-md-offset-2
                 button.btn.btn-info(type='button' ng-show='readOnly' ng-click='toggleReadOnly()') Edit
                 button.btn.btn-danger(type='button' ng-hide='readOnly' ng-click='saveUser(\''+id+'\')') Save
-
-
-        .row
-            .col-md-8.col-md-offset-2
-                h1 Single Image with validations
-                form(name="form")
-                    .button(ngf-select ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ) Select
-                    | Image thumbnail: 
-                    img(ngf-thumbnail="file || '/thumb.jpg'")
-                    br
-                    button(type="submit" ng-click="submit()") Submit
+                
     

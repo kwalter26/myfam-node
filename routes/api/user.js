@@ -64,6 +64,7 @@ router.post('/:key/:value',function(req,res){
         if(req.body.email) user.email = req.body.email;
         if(req.body.primaryPhone) user.primaryPhone = req.body.primaryPhone;
         if(req.body.secondaryPhone) user.secondaryPhone = req.body.secondaryPhone;
+        if(req.body.imgUrl) user.imgUrl = req.body.imgUrl;
 
         if (req.body.password && req.body.confirmPassword && (req.body.password == req.body.confirmPassword))
             user.updatePassword(password);
@@ -99,7 +100,7 @@ router.post('/upload/',multipartyMiddleware,function(req,res){
         user.save(function(err) {
             if (err)
                 throw err;
-            res.json(user);
+            res.json(user.imgUrl);
         });
     });   
 

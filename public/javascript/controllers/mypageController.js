@@ -6,6 +6,13 @@ angular.module('app')
         $scope.toggleReadOnly = function(){
             $scope.readOnly = !$scope.readOnly;
         };
+        $scope.imgUrl = function(){
+            if($scope.file){
+                console.log($scope.file)
+                return $scope.file;
+            }
+            return $scope.user.imgUrl;
+        }
 
         $scope.getUser = function(id){
             $http.get('/api/user/_id/' + id)
@@ -20,15 +27,20 @@ angular.module('app')
             $http.post('/api/user/_id/' + id,$scope.user)
                 .success(function(user){
                     $scope.user = user;
+                    if($scope.file){
+                        $scope.upload($scope.file);
+                    }
                     $scope.toggleReadOnly();
+                    $scope.file = null;
                 })
                 .error(function(err){
                 });
+            
         };
 
         $scope.submit = function() {
             //if ($scope.form.file.$valid && $scope.file) {
-                $scope.upload($scope.file);
+                
             //}
         };
 
@@ -39,7 +51,8 @@ angular.module('app')
             data: {file: file}
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-            $scope.user = resp;
+            console.log(resp.data)
+            $scope.user.imgUrl = resp.data;
         }, function (resp) {
             console.log('Error status: ' + resp.status);
         }, function (evt) {
