@@ -1,5 +1,5 @@
 angular.module('app')
-    .controller('mypageController',function($scope,$http,$upload){
+    .controller('mypageController',['$scope','$http', 'Upload', function($scope,$http,Upload) {
         $scope.user = {};
         
         $scope.readOnly = true;
@@ -26,20 +26,38 @@ angular.module('app')
                 });
         };
 
-        $scope.upload = function(){
-            console.log("here")
-            $scope.fileSelected = function(files) {
-                if (files && files.length) {
-                    $scope.file = files[0];
-                }
-            
-                $upload.upload({
-                url: '/api/user/upload',
-                file: $scope.file
-                })
-                .success(function(data) {
-                console.log(data, 'uploaded');
-                });
-    };
+        $scope.submit = function() {
+            //if ($scope.form.file.$valid && $scope.file) {
+                $scope.upload($scope.file);
+            //}
         };
-    });
+
+    // upload on file select or drop
+    $scope.upload = function (file) {
+        Upload.upload({
+            url: '/api/user/upload',
+            data: {file: file, 'username': $scope.username}
+        }).then(function (resp) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        }, function (resp) {
+            console.log('Error status: ' + resp.status);
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });
+    };
+    // for multiple files:
+    // $scope.uploadFiles = function (files) {
+    //   if (files && files.length) {
+    //     for (var i = 0; i < files.length; i++) {
+    //       Upload.upload({..., data: {file: files[i]}, ...})...;
+    //     }
+    //     // or send them all together for HTML5 browsers:
+    //     Upload.upload({..., data: {file: files}, ...})...;
+    //   }
+    // }
+
+
+        
+        
+    }]);

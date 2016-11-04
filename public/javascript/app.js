@@ -1,5 +1,5 @@
 
-angular.module('app',['ngRoute','angularFileUpload'])
+angular.module('app',['ngRoute','ngFileUpload'])
   .config(function($routeProvider,$locationProvider){
     $routeProvider
         .when('/',{

@@ -1,17 +1,11 @@
 var express = require('express');
 var router  = express.Router();
+var fs = require('fs');
 var User = require('../../models/user');
-var multer  =   require('multer');
 
-var storage =   multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './public/images/' + req.user.id + '/');
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.fieldname + '-' + Date.now());
-  }
-});
-var upload = multer({ storage : storage}).single('userPhoto');
+var multiparty = require('connect-multiparty');
+var multipartyMiddleware = multiparty({ uploadDir: './tmp/uploads' });
+
 
 router.get('/',function(req,res){
     User.find({},{
@@ -28,6 +22,10 @@ router.get('/',function(req,res){
         }
         res.json(users);
     })
+});
+
+router.post('/',function(req,res){
+    
 });
 
 router.get('/:key/:value',function(req,res){
@@ -79,13 +77,34 @@ router.post('/:key/:value',function(req,res){
     });
 });
 
-router.post('/upload',function(req,res){
-    upload(req,res,function(err) {
-        if(err) {
-            return res.end("Error uploading file.");
+router.post('/upload/:id',multipartyMiddleware,function(req,res){
+
+    console.log(req.body, req.files);
+    console.log(req.user.id)
+    fs.rename(req.files.file.path,'./public/uploads/'  + req.user.id + '/'+ req.files.file.name);
+
+    User.findOne({id:req.params.id},{
+         __v:false,
+        password:false,
+        token:false,
+        tokenExpire:false,
+    },function(err,user){
+        if(err){
+            throw err;
         }
-        res.end("File is uploaded");
-    });
+        if(!user){
+
+        }
+
+        
+
+
+        res.json(user);
+    });   
+
+
+    res.status(200).send('OK');
+
 });
 
 

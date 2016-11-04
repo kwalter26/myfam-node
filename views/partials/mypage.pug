@@ -50,7 +50,11 @@
 
         .row
             .col-md-8.col-md-offset-2
-            form
-                input(type="file" ng-file-select="fileSelected($files)" accept="'image/*'")
-                button(type='button' ng-click='upload()') Upload
+                h1 Single Image with validations
+                form(name="form")
+                    .button(ngf-select ng-model="file" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ) Select
+                    | Image thumbnail: 
+                    img(ngf-thumbnail="file || '/thumb.jpg'")
+                    br
+                    button(type="submit" ng-click="submit()") Submit
     

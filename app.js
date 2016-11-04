@@ -11,11 +11,11 @@ var flash = require('connect-flash');
 var session = require('express-session');
 var passportSocketIo = require("passport.socketio");
 
-var dbconfig = require('./db/config.js');
+var config = require('./config.js');
 var mongoose = require('mongoose');
-mongoose.connect(dbconfig.uri,function(err){
+mongoose.connect(config.db.uri,function(err){
   if(err) console.log('Mongoose:   Error occured!',err);
-  else console.log('Mongoose:   Connected to ' + dbconfig.uri);
+  else console.log('Mongoose:   Connected to ' + config.db.uri);
 });
 var MongoStore = require('connect-mongo')(session);
 var sessionStore = new MongoStore({ mongooseConnection: mongoose.connection,clear_interval:10000 });
@@ -46,6 +46,11 @@ io.sockets.on('connection', function(socket) {
 });
 
 
+
+
+
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -68,7 +73,7 @@ app.use('/jquery',express.static(path.join(__dirname, 'node_modules/jquery')));
 app.use('/bootstrap',express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use('/angular-route',express.static(path.join(__dirname, 'node_modules/angular-route')));
 app.use('/fonts',express.static(path.join(__dirname,'node_modules/bootstrap/fonts')));
-app.use('/angular-file',express.static(path.join(__dirname,'node_modules/angular-file-upload/dist')));
+app.use('/ng-file',express.static(path.join(__dirname,'node_modules/ng-file-upload/dist')));
 
 require('./controllers/passport')(passport); // pass passport for configuration
 
