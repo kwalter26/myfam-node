@@ -77,13 +77,13 @@ router.post('/:key/:value',function(req,res){
     });
 });
 
-router.post('/upload/:id',multipartyMiddleware,function(req,res){
+router.post('/upload/',multipartyMiddleware,function(req,res){
 
     console.log(req.body, req.files);
     console.log(req.user.id)
     fs.rename(req.files.file.path,'./public/uploads/'  + req.user.id + '/'+ req.files.file.name);
 
-    User.findOne({id:req.params.id},{
+    User.findOne({_id:req.user.id},{
          __v:false,
         password:false,
         token:false,
@@ -93,17 +93,16 @@ router.post('/upload/:id',multipartyMiddleware,function(req,res){
             throw err;
         }
         if(!user){
-
+            res.json({error:'User not found'})
         }
-
-        
-
-
-        res.json(user);
+        user.imgUrl = '/uploads/'  + req.user.id + '/'+ req.files.file.name;
+        user.save(function(err) {
+            if (err)
+                throw err;
+            res.json(user);
+        });
     });   
 
-
-    res.status(200).send('OK');
 
 });
 

@@ -35,10 +35,11 @@ angular.module('app')
     // upload on file select or drop
     $scope.upload = function (file) {
         Upload.upload({
-            url: '/api/user/upload',
-            data: {file: file, 'username': $scope.username}
+            url: '/api/user/upload/',
+            data: {file: file}
         }).then(function (resp) {
             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            $scope.user = resp;
         }, function (resp) {
             console.log('Error status: ' + resp.status);
         }, function (evt) {
