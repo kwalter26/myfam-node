@@ -9,7 +9,7 @@ module.exports = function(app,passport) {
   });
 
   app.get('/*', isLoggedIn, function(req,res,next){
-    res.render('index',{title:'Score-It',user:{email:req.user.email,id:req.user.id}});
+    res.render('index',{title:'Score-It',user:{email:req.user.email,id:req.user.id,pic:req.user.imgUrl}});
   });
 
   // route middleware to make sure a user is logged in

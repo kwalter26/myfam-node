@@ -20,6 +20,9 @@ html(ng-app='app')
                 a(href='/members') Members
             ul.nav.navbar-nav.navbar-right
               li
+                a.navbar-brand(href='#')
+                  img(alt='profile-pic' src=user.pic height='27px')
+              li
                 a(href='/mypage')= user.email
               li
                 a(href='/auth/logout' target='_self') Logout
