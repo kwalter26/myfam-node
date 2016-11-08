@@ -8,9 +8,10 @@ module.exports = function(passport) {
     var crypto = require('crypto');
 
     router.get('/login', function(req, res, next) {
+        var m = req.flash('error')[0]
         res.render('login', {
             title: 'Login',
-            message: req.flash('loginMessage')
+            message: m
         });
     });
 
@@ -21,15 +22,16 @@ module.exports = function(passport) {
     }));
 
     router.get('/register', function(req, res, next) {
+        var m = req.flash('error')[0]
         res.render('register', {
             title: 'Register',
-            message: req.flash('loginMessage')
+            message: m
         });
     });
 
     router.post('/register', passport.authenticate('local-signup', {
         successRedirect: '/', // redirect to the secure profile section
-        failureRedirect: '/signup', // redirect back to the signup page if there is an error
+        failureRedirect: '/auth/register', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
 

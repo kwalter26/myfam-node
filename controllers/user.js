@@ -3,9 +3,9 @@ var cloud = require('./cloud')
 
 
 module.exports = {
-    newUser: function(email,password,role,callback){
+    newUser: function(username,password,role,callback){
         var newUser = new User();
-        newUser.email = email;
+        newUser.username = username;
         newUser.role = role;
         if(password) newUser.updatePassword(password);
         newUser.save(function(err) {

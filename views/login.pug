@@ -9,9 +9,11 @@ block content
             .panel-heading
               h1= title
             .panel-body
+              if(message)
+                .alert.alert-danger= message
               .form-group
-                label Email
-                input.form-control(type='email' name='email')
+                label Username
+                input.form-control(type='text' name='username')
               .form-group
                 label Password
                 input.form-control(type='password' name='password')
