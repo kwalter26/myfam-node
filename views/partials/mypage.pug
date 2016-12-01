@@ -36,6 +36,12 @@
                 h3 Fam
                 .row
                     .col-md-4
+                        p Mother: {{user.mother.firstName}} {{user.mother.lastName}}
+                        p Father: {{user.father.firstName}} {{user.father.lastName}}
+                        p Spouse: {{user.spouse.firstName}} {{user.spouse.lastName}}
+                .row
+                    .col-md-4
+                        button.btn.btn-info Add Relationship        
         .row
             .col-md-8.col-md-offset-2
                 hr

@@ -14,12 +14,18 @@ var userSchema = mongoose.Schema({
   active:Boolean,
   primaryPhone:String,
   secondaryPhone:String,
-  family:[
-    {
-      id:String,
-      relationship:String
-    }
-  ]
+  mother:{
+    type: mongoose.Schema.ObjectId,
+    ref: 'User'
+  },
+  father:{
+    type: mongoose.Schema.ObjectId,
+    ref: 'User'
+  },
+  spouse:{
+    type: mongoose.Schema.ObjectId,
+    ref: 'User'
+  }
   
 });
 

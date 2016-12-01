@@ -7,6 +7,7 @@ module.exports = {
         var newUser = new User();
         newUser.username = username;
         newUser.role = role;
+        newUser.imgUrl = './images/default_profile.jpg';
         if(password) newUser.updatePassword(password);
         newUser.save(function(err) {
             if (err)
@@ -17,10 +18,9 @@ module.exports = {
     },
     getUsers: function(callback){
         User.find({},{
-            __v:false,
-            password:false,
-            token:false,
-            tokenExpire:false,
+            firstName:true,
+            lastName:true,
+            imgUrl:true
         },function(err,users){
             if(err){
                 throw err;
@@ -37,13 +37,16 @@ module.exports = {
             password:false,
             token:false,
             tokenExpire:false,
-        },function(err,user){
-            if(err){
-                throw err;
-            }
-            if(!user){
-
-            }
+        })
+        .populate('mother')
+        .populate('father')
+        .populate('spouse',{
+            firstName:true,
+            lastName:true
+        })
+        .exec(function(err,user){
+            if(err) throw err;
+            if(!user) throw 'No User'
             callback(err,user)
         })
     }
